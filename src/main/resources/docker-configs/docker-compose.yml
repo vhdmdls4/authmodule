@@ -1,0 +1,35 @@
+services:
+  postgres-compose:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ///
+      POSTGRES_PASSWORD: ///
+    ports:
+      - "54320:5432"
+    volumes:
+      - /home/victor-duarte/Desktop/dev/personal/persisted-data:/var/lib/postgresql/data
+    networks:
+      postgres-compose-network:
+        ipv4_address: 172.30.0.2
+
+  pgadmin-compose:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ///
+      PGADMIN_DEFAULT_PASSWORD: ///
+    ports:
+      - "8896:80"
+    depends_on:
+      - postgres-compose
+    networks:
+      postgres-compose-network:
+        ipv4_address: 172.30.0.3
+
+networks:
+  postgres-compose-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24
+
